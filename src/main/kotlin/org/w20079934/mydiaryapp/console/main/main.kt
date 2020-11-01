@@ -1,9 +1,14 @@
 package org.w20079934.mydiaryapp.console.main
 
+import org.w20079934.mydiaryapp.fx.app.MyDiaryApp
+import tornadofx.launch
+
 var diaryName = "World"
 
 fun main()
 {
+    launch<MyDiaryApp>();
+    /*
     var option: Int
     do
     {
@@ -17,6 +22,7 @@ fun main()
             5 -> changeName()
         }
     }while (option!=0)
+     */
 }
 
 fun menu() : Int
