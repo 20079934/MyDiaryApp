@@ -4,4 +4,6 @@ data class MyDiaryModel (
     var id: Long = 0,
     var entry: String = "",
     var signature: String = ""
-)
+) {
+    override fun toString(): String = ""+id
+}
