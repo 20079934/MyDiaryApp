@@ -1,24 +1,22 @@
 package org.w20079934.mydiaryapp.fx.views
 
-import javafx.scene.control.DatePicker
 import javafx.scene.control.TextArea
 import org.w20079934.mydiaryapp.fx.controllers.MyDiaryController
 import tornadofx.*
-import java.time.Instant
 import java.time.LocalDate
-import java.util.*
 
-class DiaryEntryEditor: View("Today's entry...") {
+class DiaryEntryEditor(date: LocalDate, editable : Boolean): View("Today's entry...") {
     val controller: MyDiaryController by inject()
     var userInput: TextArea by singleAssign()
-    val todaysDate = LocalDate.now()
+    var todaysDate = date
 
     override val root = vbox {
             label {
                 text = "Entry for $todaysDate"
             }
             textarea {
-            userInput = this
+                userInput = this
+                isEditable= editable
             }
             button("Submit") {
                 action {
@@ -31,7 +29,7 @@ class DiaryEntryEditor: View("Today's entry...") {
             }
         }
 
-        override fun onDock() {
+        fun loadEditor() {
             userInput.text = controller.getEntryContent(todaysDate)
         }
     }

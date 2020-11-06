@@ -39,7 +39,9 @@ class MyDiaryView : View("My Diary") {
             vbox {
                 button("Today's Story") {
                     setOnAction {
-                        openInternalWindow<DiaryEntryEditor>() //only today
+                        val entryView = DiaryEntryEditor(LocalDate.now(), true)
+                        entryView.loadEditor()
+                        openInternalWindow(entryView)
                     }
                     style {
                         fontSize = 25.px
@@ -50,7 +52,10 @@ class MyDiaryView : View("My Diary") {
 
                 button("Read A Day") {
                     setOnAction {
-                        controller.todaysStory()
+                        val entryView = DiaryEntryEditor(entryList.focusModel.focusedItem.date, false)
+                        entryView.loadEditor()
+                        openInternalWindow(entryView)
+
                     }
                     style {
                         fontSize = 25.px
@@ -61,7 +66,9 @@ class MyDiaryView : View("My Diary") {
 
                 button("Update") {
                     setOnAction {
-                        println("Trying to update")
+                        val entryView = DiaryEntryEditor(entryList.focusModel.focusedItem.date, true)
+                        entryView.loadEditor()
+                        openInternalWindow(entryView)
                     }
                     style {
                         fontSize = 25.px
@@ -72,8 +79,7 @@ class MyDiaryView : View("My Diary") {
 
                 button("Remove") {
                     setOnAction {
-                        val item = entryList.focusModel.focusedItem
-                        println("item date: ${item.date} and it's contents are: ${item.entry}")
+                        controller.removeItem(entryList.focusModel.focusedItem)
                     }
                     style {
                         fontSize = 25.px
@@ -88,7 +94,8 @@ class MyDiaryView : View("My Diary") {
             vbox {
                 listview<MyDiaryModel> {
                     entryList = this
-                    style {
+                    onLeftClick {
+                        println("${focusModel.focusedItem.date} entry is ${focusModel.focusedItem.entry}")
                     }
                 }
                 style {
@@ -101,7 +108,7 @@ class MyDiaryView : View("My Diary") {
     init {
         setWindowMinSize(640, 480)
         setWindowMaxSize(640, 480)
-        entryList.items.addAll(controller.getEntries())
         diaryWelcome.text = "Hello ${controller.getDiaryName()}"
+        entryList.items.addAll(controller.getEntries())
     }
 }
