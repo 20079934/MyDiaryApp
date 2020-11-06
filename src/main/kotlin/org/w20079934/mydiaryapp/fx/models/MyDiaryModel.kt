@@ -1,9 +1,11 @@
 package org.w20079934.mydiaryapp.fx.models
 
+import java.time.LocalDate
+
 data class MyDiaryModel (
-    var id: Long = 0,
-    var entry: String = "",
-    var signature: String = ""
+        var date: LocalDate = LocalDate.now(),
+        var entry: String = "",
+        var signature: String = ""
 ) {
-    override fun toString(): String = ""+id
+    override fun toString(): String = date.toString()
 }

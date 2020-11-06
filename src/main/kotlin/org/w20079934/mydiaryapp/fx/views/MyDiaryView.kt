@@ -6,8 +6,9 @@ import javafx.scene.control.ListView
 import org.w20079934.mydiaryapp.fx.controllers.MyDiaryController
 import org.w20079934.mydiaryapp.fx.models.MyDiaryModel
 import tornadofx.*
+import java.time.LocalDate
 
-class MyDiaryView : View("Help me") {
+class MyDiaryView : View("My Diary") {
 
     val controller: MyDiaryController by inject()
 
@@ -22,7 +23,7 @@ class MyDiaryView : View("Help me") {
             label("Hello x") {
                 diaryWelcome = this
                 onLeftClick {
-                    diaryWelcome.text = "Hello Mia"
+                    openInternalWindow<DiaryNameEditor>()
                 }
                 style {
                     fontSize = 32.px
@@ -36,9 +37,9 @@ class MyDiaryView : View("Help me") {
 
         hbox {
             vbox {
-                button("Today's Entry") {
+                button("Today's Story") {
                     setOnAction {
-                        controller.todaysStory()//this one will automate to today's date, but it's similar to the previous button
+                        openInternalWindow<DiaryEntryEditor>() //only today
                     }
                     style {
                         fontSize = 25.px
@@ -47,7 +48,7 @@ class MyDiaryView : View("Help me") {
                     }
                 }
 
-                button("Submit A Day") {
+                button("Read A Day") {
                     setOnAction {
                         controller.todaysStory()
                     }
@@ -72,7 +73,7 @@ class MyDiaryView : View("Help me") {
                 button("Remove") {
                     setOnAction {
                         val item = entryList.focusModel.focusedItem
-                        println("item id: ${item.id} and it's contents are: ${item.entry}")
+                        println("item date: ${item.date} and it's contents are: ${item.entry}")
                     }
                     style {
                         fontSize = 25.px
@@ -100,10 +101,7 @@ class MyDiaryView : View("Help me") {
     init {
         setWindowMinSize(640, 480)
         setWindowMaxSize(640, 480)
-        for (i in 0..10)
-        {
-            entryList.items.add(MyDiaryModel(Integer.toUnsignedLong(i),"aaa$i","a"))
-        }
+        entryList.items.addAll(controller.getEntries())
         diaryWelcome.text = "Hello ${controller.getDiaryName()}"
     }
 }
