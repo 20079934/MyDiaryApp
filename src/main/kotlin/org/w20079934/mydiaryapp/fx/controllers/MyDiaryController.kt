@@ -1,5 +1,6 @@
 package org.w20079934.mydiaryapp.fx.controllers
 
+import org.w20079934.mydiaryapp.fx.models.MyDiaryJSONStore
 import org.w20079934.mydiaryapp.fx.models.MyDiaryModel
 import org.w20079934.mydiaryapp.fx.views.MyDiaryView
 import tornadofx.Controller
@@ -8,8 +9,8 @@ import java.time.LocalDate
 
 class MyDiaryController : Controller() {
 
-    private var diaryName = ""
-    private var entries : ArrayList<MyDiaryModel> = ArrayList()
+    private var diaryName : String = "World"
+    private var entries = MyDiaryJSONStore()
 
     fun getDiaryName() : String
     {
@@ -28,29 +29,31 @@ class MyDiaryController : Controller() {
     }
 
     fun handleEntry(date :LocalDate,text: String) {
-        getEntry(date).entry = text
+        val receivedEntry = getEntry(date)
+        receivedEntry.entry = text
+        entries.update(receivedEntry)
     }
 
     fun getEntryContent(todaysDate: LocalDate) : String {
-        for (entry in entries) {
+        for (entry in entries.findAll()) {
             if (entry.date == todaysDate) return entry.entry
         }
-        return ""
+        return "Dear $diaryName,\n"
     }
 
     fun getEntry(todaysDate: LocalDate) : MyDiaryModel {
-        for (entry in entries) {
+        for (entry in entries.findAll()) {
             if (entry.date == todaysDate) return entry
         }
-        val newEntry = MyDiaryModel(todaysDate,"")
-        entries.add(newEntry)
+        val newEntry = MyDiaryModel(todaysDate,"Dear $diaryName,\n")
+        entries.create(newEntry)
         find<MyDiaryView>().entryList.items.add(newEntry)
         return newEntry
     }
 
-    fun getEntries() : ArrayList<MyDiaryModel>
+    fun getEntries() : List<MyDiaryModel>
     {
-        return entries
+        return entries.findAll()
     }
 
     fun removeItem(item: MyDiaryModel) {
@@ -61,9 +64,5 @@ class MyDiaryController : Controller() {
 
     init {
         println("controller initialized!")
-        diaryName = "World"
-        entries.add(MyDiaryModel(LocalDate.of(2020,11,4),"the day before yesterday"))
-        entries.add(MyDiaryModel(LocalDate.of(2020,11,5),"yesterday"))
-        entries.add(MyDiaryModel(LocalDate.of(2020,11,6),"today"))
     }
 }

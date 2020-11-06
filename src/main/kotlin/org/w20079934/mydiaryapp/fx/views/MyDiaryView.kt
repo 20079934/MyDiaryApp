@@ -52,9 +52,12 @@ class MyDiaryView : View("My Diary") {
 
                 button("Read A Day") {
                     setOnAction {
-                        val entryView = DiaryEntryEditor(entryList.focusModel.focusedItem.date, false)
-                        entryView.loadEditor()
-                        openInternalWindow(entryView)
+                        val focusedItem = entryList.focusModel.focusedItem
+                        if(focusedItem!=null) {
+                            val entryView = DiaryEntryEditor(focusedItem.date, false)
+                            entryView.loadEditor()
+                            openInternalWindow(entryView)
+                        }
 
                     }
                     style {
@@ -66,9 +69,12 @@ class MyDiaryView : View("My Diary") {
 
                 button("Update") {
                     setOnAction {
-                        val entryView = DiaryEntryEditor(entryList.focusModel.focusedItem.date, true)
-                        entryView.loadEditor()
-                        openInternalWindow(entryView)
+                        val focusedItem = entryList.focusModel.focusedItem
+                        if(focusedItem!=null) {
+                            val entryView = DiaryEntryEditor(focusedItem.date, true)
+                            entryView.loadEditor()
+                            openInternalWindow(entryView)
+                        }
                     }
                     style {
                         fontSize = 25.px
@@ -79,7 +85,8 @@ class MyDiaryView : View("My Diary") {
 
                 button("Remove") {
                     setOnAction {
-                        controller.removeItem(entryList.focusModel.focusedItem)
+                        val focusedItem = entryList.focusModel.focusedItem
+                        if(focusedItem!=null) controller.removeItem(entryList.focusModel.focusedItem)
                     }
                     style {
                         fontSize = 25.px
@@ -94,9 +101,6 @@ class MyDiaryView : View("My Diary") {
             vbox {
                 listview<MyDiaryModel> {
                     entryList = this
-                    onLeftClick {
-                        println("${focusModel.focusedItem.date} entry is ${focusModel.focusedItem.entry}")
-                    }
                 }
                 style {
                     fitToParentSize()
